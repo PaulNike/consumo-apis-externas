@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -20,7 +21,7 @@ public class PersonaController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseBase> crearPersona(@RequestBody PersonaRequest personaRequest){
+    public ResponseEntity<ResponseBase> crearPersona(@RequestBody PersonaRequest personaRequest) throws IOException {
         ResponseBase responseBase = personaService.crearPersona(personaRequest);
         if(responseBase.getCode() == Constants.CODIGO_EXITO){
             return ResponseEntity.ok(responseBase);
