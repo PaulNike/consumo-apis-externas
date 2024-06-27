@@ -2,6 +2,7 @@ package com.codigo.consumo_apis_externas.service.impl;
 
 import com.codigo.consumo_apis_externas.clients.ClientReniec;
 import com.codigo.consumo_apis_externas.constants.Constants;
+import com.codigo.consumo_apis_externas.controller.personalizada.PersonaException;
 import com.codigo.consumo_apis_externas.dao.PersonaRepository;
 import com.codigo.consumo_apis_externas.entity.PersonaEntity;
 import com.codigo.consumo_apis_externas.redis.RedisService;
@@ -39,7 +40,13 @@ public class PersonaServiceImpl implements PersonaService {
     @Value("${token.api}")
     private String tokenApi;
     @Override
-    public ResponseBase crearPersona(PersonaRequest personaRequest) throws IOException {
+    public ResponseBase crearPersona(PersonaRequest personaRequest) {
+        boolean existe = personaRepository.existsByNumDoc(personaRequest.getDni());
+        if(existe){
+            throw new PersonaException("Error, la persona ya existe");
+        }else{
+            //el resto de la logica para guardar a la persona
+        }
         PersonaEntity personaEntity = getEntityRestTemplate(personaRequest);
         if(personaEntity != null){
             personaRepository.save(personaEntity);
